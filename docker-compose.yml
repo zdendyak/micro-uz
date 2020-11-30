@@ -1,0 +1,56 @@
+version: "3"
+services:
+  # client:
+  #   build: ./client
+  #   volumes:
+  #     - "./client"
+  #   ports: 
+  #     - "7000:7000"
+  #   links:
+  #     - api
+  #   networks: 
+  #     - webappnetwork
+  api:
+    build: "./api"
+    depends_on:
+      - schedule-service
+      - station-service
+    ports: 
+      - "3000:3000"
+    volumes:
+      - ./api:/opt/app
+    # networks: 
+    #   - webappnetwork
+
+  schedule-service:
+    build: "./schedule-service"
+    depends_on:
+      - parser-service
+    ports: 
+      - "3001:3001"
+    volumes:
+      - ./schedule-service:/opt/app
+    # networks: 
+    #   - webappnetwork
+  
+  station-service:
+    build: "./station-service"
+    ports: 
+      - "3002:3002"
+    volumes:
+      - ./station-service:/opt/app
+    # networks: 
+    #   - webappnetwork
+  
+  parser-service:
+    build: "./parser-service"
+    ports: 
+      - "3003:3003"
+    volumes:
+      - ./parser-service:/opt/app
+    # networks: 
+    #   - webappnetwork
+
+# networks: 
+#   webappnetwork:
+#     driver: bridge
